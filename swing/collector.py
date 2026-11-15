@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""스윙 탐색용 시세 수집기 v2 (market-inbox 공개 저장소에서 GitHub Actions로 실행).
+"""스윙 탐색용 시세 수집기 v3 (market-inbox 공개 저장소에서 GitHub Actions로 실행).
 
 하는 일: 한국(코스피 시총 상위 200 + 코스닥 시총 상위 150) 또는
 미국(S&P 500 + 나스닥 100) 종목의 일별 시세를 받아 업종 강도와 종목 지표를
@@ -383,6 +383,8 @@ def build(uni, prices, index, market):
         "r5": g["r5"].median(), "breadth": g["above20"].mean()})
     sec = sec[sec["n"] >= 3]
     sec["delta"] = sec["rs20"] - sec["rs20_prev"]                 # 5거래일 사이 상대강도 변화
+    strong, wide = sec["rs20"] >= 0, sec["breadth"] >= 0.5        # 성격: 반등인지 추세인지 구분
+    sec["kind"] = np.where(strong & wide, "강세 강화", np.where(~strong & ~wide, "반등", "전환 중"))
     return df, sec.sort_values("delta", ascending=False), idx
 
 
@@ -391,20 +393,22 @@ def pct(x, d=1):
     return "-" if x is None or (isinstance(x, float) and math.isnan(x)) else f"{x * 100:+.{d}f}%"
 
 
-def stock_rows(d, kr):
+def stock_rows(d, kr, kinds=None):
+    kinds = kinds or {}
     out = ["| 종목 | 업종 | 종가 | 1일 | 5일 | 20일 | 지수대비20일 | 거래량배수 | 고점대비 | 하루변동폭 |",
            "|---|---|---|---|---|---|---|---|---|---|"]
     for r in d.to_dict("records"):
         price = f"{r['close']:,.0f}" if kr else f"{r['close']:,.2f}"
-        out.append(f"| {r['name']}({r['ticker']}) | {r['sector']} | {price} | {pct(r['r1'])} | {pct(r['r5'])} | "
+        tag = f" [{kinds[r['sector']]}]" if r["sector"] in kinds else ""
+        out.append(f"| {r['name']}({r['ticker']}) | {r['sector']}{tag} | {price} | {pct(r['r1'])} | {pct(r['r5'])} | "
                    f"{pct(r['r20'])} | {pct(r['rs20'])} | {r['vol_x']:.1f}배 | {pct(r['off_high'])} | {pct(r['atr']).lstrip('+')} |")
     return out
 
 
 def sector_rows(s):
-    out = ["| 업종 | 종목수 | 지수대비20일 | 5일전보다 | 5일 | 20일선 위 비율 |", "|---|---|---|---|---|---|"]
+    out = ["| 업종 | 성격 | 종목수 | 지수대비20일 | 5일전보다 | 5일 | 20일선 위 비율 |", "|---|---|---|---|---|---|---|"]
     for name, r in s.iterrows():
-        out.append(f"| {name} | {int(r['n'])} | {pct(r['rs20'])} | {pct(r['delta'])}p | {pct(r['r5'])} | {r['breadth'] * 100:.0f}% |")
+        out.append(f"| {name} | {r['kind']} | {int(r['n'])} | {pct(r['rs20'])} | {pct(r['delta'])}p | {pct(r['r5'])} | {r['breadth'] * 100:.0f}% |")
     return out
 
 
@@ -432,17 +436,19 @@ def render(market, uni, df, sec, idx, now):
         return "\n".join(L) + "\n", status
     liquid = df[df["value20"] >= (5e9 if kr else 2e7)]            # 거래대금 기준: 한국 50억원, 미국 2천만 달러
     rising = sec[sec["delta"] > 0].head(10)
-    L += ["", "## 강해지는 업종 (5거래일 사이 지수 대비 강도가 가장 많이 오른 순 · 20일선 위 비율이 낮으면 급락 뒤 반등일 수 있음)"] + sector_rows(rising)
+    kinds = sec["kind"].to_dict()
+    L += ["", "## 강해지는 업종 (5거래일 사이 지수 대비 강도가 가장 많이 오른 순 · 반등 포함, 성격 열로 구분)"] + sector_rows(rising)
     L += ["", "## 이미 강한 업종 (지수 대비 20일 강도 상위 5)"] + sector_rows(sec.sort_values("rs20", ascending=False).head(5))
     L += ["", "## 약한 업종 (지수 대비 20일 강도 하위 5)"] + sector_rows(sec.sort_values("rs20").head(5))
     picks = pd.concat([liquid[liquid["sector"] == s].sort_values("rs20", ascending=False).head(3)
                        for s in rising.index[:6]]) if len(rising) else liquid.head(0)
-    L += ["", "## 강해지는 업종 상위 6개의 종목 (업종마다 지수 대비 강도 상위 3)"] + stock_rows(picks, kr)
+    L += ["", "## 강해지는 업종 상위 6개의 종목 (업종마다 지수 대비 강도 상위 3)"] + stock_rows(picks, kr, kinds)
     surge = liquid[(liquid["vol_x"] >= 2) & (liquid["r1"] > 0)].sort_values("vol_x", ascending=False).head(10)
-    L += ["", "## 거래량 급증 (직전 20일 평균의 2배 이상이면서 상승 마감, 상위 10)"] + stock_rows(surge, kr)
+    L += ["", "## 거래량 급증 (직전 20일 평균의 2배 이상이면서 상승 마감, 상위 10)"] + stock_rows(surge, kr, kinds)
     highs = liquid[liquid["new20"] & (liquid["off_high"] >= -0.05)].sort_values("rs20", ascending=False).head(8)
-    L += ["", "## 20일 신고가이면서 52주 고점 5% 이내 (지수 대비 강도 상위 8)"] + stock_rows(highs, kr)
+    L += ["", "## 20일 신고가이면서 52주 고점 5% 이내 (지수 대비 강도 상위 8)"] + stock_rows(highs, kr, kinds)
     L += ["", "## 열 설명",
+          "- 성격: 강세 강화 = 지수대비20일 0 이상이고 20일선 위 비율 50% 이상 / 반등 = 둘 다 미달(약했던 업종의 되돌림) / 전환 중 = 하나만 충족.",
           "- 지수대비20일: 종목 20일 수익률에서 지수 20일 수익률을 뺀 값. 업종은 소속 종목의 중앙값.",
           "- 5일전보다: 지수대비20일이 5거래일 전보다 얼마나 변했는지(%p).",
           "- 거래량배수: 기준일 거래량 ÷ 직전 20일 평균. 고점대비: 최근 1년 고가 대비.",
