@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""스윙 탐색용 시세 수집기 (market-inbox 공개 저장소에서 GitHub Actions로 실행).
+"""스윙 탐색용 시세 수집기 v2 (market-inbox 공개 저장소에서 GitHub Actions로 실행).
 
 하는 일: 한국(코스피 시총 상위 200 + 코스닥 시총 상위 150) 또는
 미국(S&P 500 + 나스닥 100) 종목의 일별 시세를 받아 업종 강도와 종목 지표를
@@ -11,6 +11,7 @@
 import argparse
 import datetime as dt
 import io
+import json
 import math
 import os
 import re
@@ -26,16 +27,55 @@ KST = ZoneInfo("Asia/Seoul")
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
                     "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"}
 MIN_ROWS = 61                      # 지표 계산에 필요한 최소 거래일 수
-KR_BIO = ("제약", "생물공학", "생명과학")
+KR_BIO = ("제약", "생물공학", "생명과학", "의약", "생물학", "자연과학 및 공학 연구개발")
 US_BIO = ("Biotechnology", "Pharmaceuticals", "Life Sciences Tools & Services")
 KR_NAME_SKIP = re.compile(r"(스팩|리츠|\d호$|우$|우B$|우C$|\(전환\)|^KODEX|^TIGER|^ACE |^RISE |"
                           r"^SOL |^HANARO|^KOSEF|^PLUS |^ARIRANG|^KBSTAR|^TIMEFOLIO|^KIWOOM|ETN)")
 PROBLEMS = []                      # 막힌 곳 기록 (요약 파일 끝에 적는다)
+PROBE = []                         # 조달처별 시도 결과 (swing/probe_<시장>.md 에 적는다)
+CODE_KEYS = ("itemCode", "stockCode", "code", "reutersCode", "symbolCode")
+NAME_KEYS = ("stockName", "itemName", "name", "korName")
+GROUP_KEYS = ("no", "industryCode", "groupCode", "upjongCode", "id")
+NAVER = "https://m.stock.naver.com/api/stocks/"
 
 
 def note(msg):
     PROBLEMS.append(msg)
     print("[막힘]", msg, file=sys.stderr)
+
+
+def probe(what, result):
+    PROBE.append(f"- {what}: {result}")
+    print("[조달]", what, result, file=sys.stderr)
+
+
+def jget(url):
+    text = get(url)
+    try:
+        return json.loads(text)
+    except ValueError:
+        raise RuntimeError(f"JSON 아님: {text[:160]!r}")
+
+
+def find_rows(obj, keys):
+    """JSON 안에서 keys 중 하나를 가진 dict 들의 첫 목록을 찾는다(응답 모양이 바뀌어도 버티게)."""
+    queue = [obj]
+    while queue:
+        o = queue.pop(0)
+        if isinstance(o, list):
+            if o and isinstance(o[0], dict) and any(k in o[0] for k in keys):
+                return o
+            queue.extend(x for x in o if isinstance(x, (dict, list)))
+        elif isinstance(o, dict):
+            queue.extend(v for v in o.values() if isinstance(v, (dict, list)))
+    return []
+
+
+def pick(d, keys):
+    for k in keys:
+        if d.get(k) not in (None, ""):
+            return str(d[k]).strip()
+    return ""
 
 
 def get(url, enc=None, tries=3, timeout=15):
@@ -52,46 +92,113 @@ def get(url, enc=None, tries=3, timeout=15):
     raise RuntimeError(f"{url.split('?')[0]} ({last})")
 
 
-# ───────────────────────── 한국 (네이버 금융) ─────────────────────────
-def kr_sector_map():
-    """종목코드 → 네이버 업종명."""
-    base = "https://finance.naver.com/sise/"
-    html = get(base + "sise_group.naver?type=upjong", enc="euc-kr")
-    groups = re.findall(r'sise_group_detail\.naver\?type=upjong&(?:amp;)?no=(\d+)"[^>]*>([^<]+)</a>', html)
-    out = {}
-    for no, name in groups:
-        try:
-            page = get(base + f"sise_group_detail.naver?type=upjong&no={no}", enc="euc-kr")
-        except RuntimeError as e:
-            note(f"업종 페이지 실패: {name.strip()} {e}")
-            continue
-        for code in set(re.findall(r"/item/main\.naver\?code=(\d{6})", page)):
-            out.setdefault(code, name.strip())
-        time.sleep(0.15)
-    return out
-
-
-def kr_ranked(sosok, pages):
-    """시가총액 순위 페이지에서 (코드, 이름) 목록. sosok 0=코스피, 1=코스닥."""
-    rows, seen = [], set()
-    for p in range(1, pages + 1):
-        html = get(f"https://finance.naver.com/sise/sise_market_sum.naver?sosok={sosok}&page={p}", enc="euc-kr")
-        for code, name in re.findall(r'/item/main\.naver\?code=(\d{6})"[^>]*>([^<]+)</a>', html):
-            if code not in seen:
-                seen.add(code)
-                rows.append((code, name.strip()))
-        time.sleep(0.15)
+# ───────────────────────── 한국 (목록: 네이버 JSON·KIND / 시세: 야후) ─────────────────────────
+def kr_ranked_naver(market, want):
+    """네이버 시가총액 순위 JSON → [(코드, 이름)]."""
+    rows = []
+    for p in range(1, math.ceil(want / 100) + 3):
+        items = find_rows(jget(f"{NAVER}marketValue/{market}?page={p}&pageSize=100"), CODE_KEYS)
+        if p == 1:
+            probe(f"네이버 시총 순위 {market}", f"{len(items)}행, 열 {sorted(items[0])[:14] if items else '없음'}")
+        if not items:
+            break
+        for it in items:
+            if str(it.get("stockEndType", "stock")).lower() != "stock":
+                continue
+            rows.append((pick(it, CODE_KEYS), pick(it, NAME_KEYS)))
+        time.sleep(0.2)
+    if len(rows) < want:
+        raise RuntimeError(f"순위 {len(rows)}행뿐")
     return rows
 
 
+def kr_ranked_fdr(market):
+    """대체: FinanceDataReader 상장 목록(시가총액 순)."""
+    try:
+        import FinanceDataReader as fdr
+    except ImportError:
+        import subprocess
+        subprocess.run([sys.executable, "-m", "pip", "install", "-q", "finance-datareader"], check=True)
+        import FinanceDataReader as fdr
+    df = fdr.StockListing("KRX")
+    probe("FinanceDataReader 목록", f"{len(df)}행, 열 {list(df.columns)[:12]}")
+    df = df[df["Market"].astype(str).str.upper().str.startswith(market)].sort_values("Marcap", ascending=False)
+    return list(zip(df["Code"].astype(str), df["Name"].astype(str)))
+
+
+def kr_sectors_naver():
+    """네이버 업종 JSON → {코드: 업종명}."""
+    groups, p = [], 1
+    while p <= 3:
+        got = find_rows(jget(f"{NAVER}industry?page={p}&pageSize=100"), GROUP_KEYS)
+        if p == 1:
+            probe("네이버 업종 목록", f"{len(got)}행, 열 {sorted(got[0])[:14] if got else '없음'}")
+        if not got:
+            break
+        groups += got
+        if len(got) < 100:
+            break
+        p += 1
+    out = {}
+    for i, g in enumerate(groups):
+        gid, gname = pick(g, GROUP_KEYS), pick(g, ("name", "industryName", "groupName", "upjongName"))
+        if not gid or not gname:
+            continue
+        for p in range(1, 6):
+            try:
+                items = find_rows(jget(f"{NAVER}industry/{gid}?page={p}&pageSize=100"), CODE_KEYS)
+            except RuntimeError as e:
+                if i == 0:
+                    probe("네이버 업종 상세", f"실패 {e}")
+                break
+            if i == 0 and p == 1:
+                probe("네이버 업종 상세", f"{gname}: {len(items)}행, 열 {sorted(items[0])[:10] if items else '없음'}")
+            for it in items:
+                out.setdefault(pick(it, CODE_KEYS), gname)
+            if len(items) < 100:
+                break
+        time.sleep(0.1)
+    if len(out) < 500:
+        raise RuntimeError(f"업종 표 {len(out)}종목뿐")
+    return out
+
+
+def kr_sectors_kind():
+    """대체: 한국거래소 KIND 상장법인 목록의 업종."""
+    out = {}
+    for mk in ("stockMkt", "kosdaqMkt"):
+        html = get("https://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13&marketType=" + mk,
+                   enc="euc-kr", timeout=40)
+        t = pd.read_html(io.StringIO(html), converters={"종목코드": str})[0]
+        for code, sec in zip(t["종목코드"], t["업종"]):
+            out[str(code).strip().zfill(6)] = str(sec).strip()
+    probe("KIND 상장법인 목록", f"{len(out)}종목")
+    if len(out) < 500:
+        raise RuntimeError(f"KIND 표 {len(out)}종목뿐")
+    return out
+
+
+def first_ok(label, *funcs):
+    """여러 조달처를 차례로 시도해 처음 성공한 결과를 쓴다."""
+    for name, fn in funcs:
+        try:
+            r = fn()
+            probe(label, f"{name} 사용")
+            return r
+        except Exception as e:
+            probe(label, f"{name} 실패 — {type(e).__name__}: {str(e)[:200]}")
+    raise RuntimeError(f"{label}: 모든 조달처 실패")
+
+
 def kr_universe():
-    sectors = kr_sector_map()
-    if len(sectors) < 500:
-        raise RuntimeError(f"업종 표가 너무 적음({len(sectors)})")
+    sectors = first_ok("한국 업종", ("네이버", kr_sectors_naver), ("KIND", kr_sectors_kind))
     uni = []
-    for sosok, market, want in ((0, "KOSPI", 200), (1, "KOSDAQ", 150)):
+    for market, want in (("KOSPI", 200), ("KOSDAQ", 150)):
+        ranked = first_ok(f"한국 순위 {market}",
+                          ("네이버", lambda m=market, w=want: kr_ranked_naver(m, w + 80)),
+                          ("FinanceDataReader", lambda m=market: kr_ranked_fdr(m)))
         n = 0
-        for code, name in kr_ranked(sosok, pages=math.ceil(want / 50) + 3):
+        for code, name in ranked:
             if n >= want:
                 break
             if KR_NAME_SKIP.search(name) or not code.endswith("0") or code not in sectors:
@@ -100,21 +207,27 @@ def kr_universe():
             if any(k in sectors[code] for k in KR_BIO):
                 continue
             uni.append({"ticker": code, "name": name, "market": market, "sector": sectors[code]})
+    if len(uni) < 150:
+        raise RuntimeError(f"종목 목록이 너무 적음({len(uni)})")
     return pd.DataFrame(uni)
 
 
-def kr_prices(symbol, days=420):
+def kr_prices_naver(symbol, days=420):
+    """대체 시세: 네이버 차트(두 주소를 차례로)."""
     end = dt.datetime.now(KST).date()
-    start = end - dt.timedelta(days=days)
-    url = ("https://api.finance.naver.com/siseJson.naver?"
-           f"symbol={symbol}&requestType=1&startTime={start:%Y%m%d}&endTime={end:%Y%m%d}&timeframe=day")
-    txt = get(url)
-    rows = re.findall(r'\[\s*"(\d{8})"\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)', txt)
-    if not rows:
-        raise RuntimeError(f"시세 없음 {symbol}")
-    df = pd.DataFrame(rows, columns=["date", "open", "high", "low", "close", "volume"])
-    df["date"] = pd.to_datetime(df["date"])
-    return df.set_index("date").astype(float).sort_index()
+    q = f"symbol={symbol}&requestType=1&startTime={end - dt.timedelta(days=days):%Y%m%d}&endTime={end:%Y%m%d}&timeframe=day"
+    for base in ("https://m.stock.naver.com/front-api/external/chart/domestic/info?",
+                 "https://api.finance.naver.com/siseJson.naver?"):
+        try:
+            txt = get(base + q, tries=2)
+        except RuntimeError:
+            continue
+        rows = re.findall(r'\[\s*"(\d{8})"\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)', txt)
+        if rows:
+            df = pd.DataFrame(rows, columns=["date", "open", "high", "low", "close", "volume"])
+            df["date"] = pd.to_datetime(df["date"])
+            return df.set_index("date").astype(float).sort_index()
+    raise RuntimeError(f"시세 없음 {symbol}")
 
 
 def collect_kr(cache_path):
@@ -124,40 +237,54 @@ def collect_kr(cache_path):
     except Exception as e:
         note(f"종목 목록 새로 받기 실패({e}) → 저장해 둔 목록 사용")
         uni = pd.read_csv(cache_path, dtype={"ticker": str})
-    index = {}
-    for sym in ("KOSPI", "KOSDAQ"):
+    suffix = {"KOSPI": ".KS", "KOSDAQ": ".KQ"}
+    ymap = {t + suffix[m]: t for t, m in zip(uni["ticker"], uni["market"])}
+    raw = yahoo_prices(list(ymap) + ["^KS11", "^KQ11"])
+    index = {k: raw.pop(y) for k, y in (("KOSPI", "^KS11"), ("KOSDAQ", "^KQ11")) if y in raw}
+    prices = {ymap[y]: df for y, df in raw.items() if y in ymap}
+    probe("한국 시세(야후)", f"{len(prices)}/{len(uni)}종목, 지수 {sorted(index)}")
+    missing = [t for t in uni["ticker"] if t not in prices]
+    naver_ok = 0
+    for t in missing[:400]:
         try:
-            index[sym] = kr_prices(sym)
-        except Exception as e:
-            note(f"지수 시세 실패: {sym} {e}")
-    prices = {}
-    for t in uni["ticker"]:
-        try:
-            prices[t] = kr_prices(t)
-        except Exception as e:
-            note(f"종목 시세 실패: {t} {e}")
+            prices[t] = kr_prices_naver(t)
+            naver_ok += 1
+        except Exception:
+            note(f"종목 시세 실패: {t}")
         time.sleep(0.05)
+    for k in ("KOSPI", "KOSDAQ"):
+        if k not in index:
+            try:
+                index[k] = kr_prices_naver(k)
+                naver_ok += 1
+            except Exception as e:
+                note(f"지수 시세 실패: {k} {e}")
+    if missing:
+        probe("한국 시세(네이버 보충)", f"{naver_ok}건 성공 / 야후에서 빠진 {len(missing)}종목")
     return uni, prices, index
 
 
 # ───────────────────────── 미국 (위키백과 목록 + 야후) ─────────────────────────
-def _wiki_table(url, need):
+def _wiki_table(url, need, rows=(0, 10 ** 6)):
+    """열 이름에 need 중 하나가 들어 있고 행 수가 rows 범위인 첫 표."""
+    seen = []
     for t in pd.read_html(io.StringIO(get(url))):
-        cols = [str(c) for c in t.columns]
-        if any(n in cols for n in need):
+        cols = [" ".join(map(str, c)) if isinstance(c, tuple) else str(c) for c in t.columns]
+        seen.append(cols[:6])
+        if rows[0] <= len(t) <= rows[1] and any(n in c.lower() for c in cols for n in need):
             t.columns = cols
             return t
-    raise RuntimeError("표를 찾지 못함 " + url)
+    raise RuntimeError(f"표를 찾지 못함. 본 표의 열: {seen[:6]}")
 
 
 def us_universe():
-    sp = _wiki_table("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies", ("Symbol",))
+    sp = _wiki_table("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies", ("symbol",), rows=(400, 600))
     uni = pd.DataFrame({"ticker": sp["Symbol"], "name": sp["Security"],
                         "market": "S&P500", "sector": sp["GICS Sub-Industry"]})
     try:
-        nd = _wiki_table("https://en.wikipedia.org/wiki/Nasdaq-100", ("Ticker", "Symbol"))
-        tcol = "Ticker" if "Ticker" in nd.columns else "Symbol"
-        ncol = next((c for c in nd.columns if c.lower() in ("company", "security")), tcol)
+        nd = _wiki_table("https://en.wikipedia.org/wiki/Nasdaq-100", ("ticker", "symbol"), rows=(90, 115))
+        tcol = next(c for c in nd.columns if "ticker" in c.lower() or "symbol" in c.lower())
+        ncol = next((c for c in nd.columns if "company" in c.lower() or "security" in c.lower()), tcol)
         scol = next((c for c in nd.columns if "sub" in c.lower()), None) or \
             next((c for c in nd.columns if "sector" in c.lower() or "industry" in c.lower()), None)
         extra = nd[~nd[tcol].isin(uni["ticker"])]
@@ -173,7 +300,7 @@ def us_universe():
     return uni
 
 
-def us_prices(tickers):
+def yahoo_prices(tickers):
     import yfinance as yf
     out = {}
     for i in range(0, len(tickers), 100):
@@ -203,7 +330,7 @@ def collect_us(cache_path):
     except Exception as e:
         note(f"종목 목록 새로 받기 실패({e}) → 저장해 둔 목록 사용")
         uni = pd.read_csv(cache_path, dtype={"ticker": str})
-    prices = us_prices(list(uni["ticker"]) + ["SPY", "QQQ"])
+    prices = yahoo_prices(list(uni["ticker"]) + ["SPY", "QQQ"])
     index = {k: prices.pop(k) for k in ("SPY", "QQQ") if k in prices}
     for t in uni["ticker"]:
         if t not in prices:
@@ -238,7 +365,7 @@ def build(uni, prices, index, market):
     bench = {"KOSPI": "KOSPI", "KOSDAQ": "KOSDAQ", "S&P500": "SPY", "NASDAQ100": "QQQ"}
     rows = []
     for u in uni.to_dict("records"):
-        m = metrics(prices.get(u["ticker"]))
+        m = metrics(prices.get(str(u["ticker"])))
         if not m:
             continue
         b = idx.get(bench[u["market"]])
@@ -288,7 +415,7 @@ def render(market, uni, df, sec, idx, now):
     ratio = ok / total if total else 0
     idx_ok = all(idx.get(k) for k in (("KOSPI", "KOSDAQ") if kr else ("SPY", "QQQ")))
     status = "실패" if ratio < 0.6 or not ok else ("정상" if ratio >= 0.9 and idx_ok else "축약")
-    scope = ("한국: 코스피 시총 상위 200 + 코스닥 시총 상위 150 (우선주·ETF·스팩·바이오 제외)" if kr
+    scope = ("한국: 코스피 시총 상위 200 + 코스닥 시총 상위 150 (우선주·ETF·스팩·바이오 제외), 시세는 야후" if kr
              else "미국: S&P 500 + 나스닥 100 (바이오·제약 제외), 지수는 SPY·QQQ로 대신함")
     L = [f"작성 시각: {now:%Y-%m-%d %H:%M} KST",
          f"기준 거래일: {day if day else '없음'}",
@@ -305,7 +432,7 @@ def render(market, uni, df, sec, idx, now):
         return "\n".join(L) + "\n", status
     liquid = df[df["value20"] >= (5e9 if kr else 2e7)]            # 거래대금 기준: 한국 50억원, 미국 2천만 달러
     rising = sec[sec["delta"] > 0].head(10)
-    L += ["", "## 강해지는 업종 (5거래일 사이 지수 대비 강도가 가장 많이 오른 순)"] + sector_rows(rising)
+    L += ["", "## 강해지는 업종 (5거래일 사이 지수 대비 강도가 가장 많이 오른 순 · 20일선 위 비율이 낮으면 급락 뒤 반등일 수 있음)"] + sector_rows(rising)
     L += ["", "## 이미 강한 업종 (지수 대비 20일 강도 상위 5)"] + sector_rows(sec.sort_values("rs20", ascending=False).head(5))
     L += ["", "## 약한 업종 (지수 대비 20일 강도 하위 5)"] + sector_rows(sec.sort_values("rs20").head(5))
     picks = pd.concat([liquid[liquid["sector"] == s].sort_values("rs20", ascending=False).head(3)
@@ -346,6 +473,8 @@ def main():
         f.write(text)
     if len(df):
         df.round(4).to_csv(os.path.join(a.out, f"{a.market}_all.csv"), index=False)
+    with open(os.path.join(a.out, f"probe_{a.market}.md"), "w", encoding="utf-8") as f:
+        f.write(f"조달 진단 {now:%Y-%m-%d %H:%M} KST ({a.market}, 상태 {status})\n\n" + "\n".join(PROBE + [f"- 막힘: {p}" for p in PROBLEMS[:40]]) + "\n")
     print(f"{a.market}: 상태 {status}, 계산 {len(df)}종목, 막힌 곳 {len(PROBLEMS)}건")
 
 
