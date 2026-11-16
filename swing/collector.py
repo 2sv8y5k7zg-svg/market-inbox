@@ -29,6 +29,7 @@ UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
 MIN_ROWS = 61                      # 지표 계산에 필요한 최소 거래일 수
 KR_BIO = ("제약", "생물공학", "생명과학", "의약", "생물학", "자연과학 및 공학 연구개발")
 US_BIO = ("Biotechnology", "Pharmaceuticals", "Life Sciences Tools & Services")
+KR_BIO_NAME = ("바이오", "제약", "파마", "테라퓨틱", "신약")   # 업종 분류가 달라도 이름으로 거른다
 KR_NAME_SKIP = re.compile(r"(스팩|리츠|\d호$|우$|우B$|우C$|\(전환\)|^KODEX|^TIGER|^ACE |^RISE |"
                           r"^SOL |^HANARO|^KOSEF|^PLUS |^ARIRANG|^KBSTAR|^TIMEFOLIO|^KIWOOM|ETN)")
 PROBLEMS = []                      # 막힌 곳 기록 (요약 파일 끝에 적는다)
@@ -204,7 +205,7 @@ def kr_universe():
             if KR_NAME_SKIP.search(name) or not code.endswith("0") or code not in sectors:
                 continue                      # 우선주·ETF·스팩 등 제외
             n += 1                            # 바이오는 순위에는 세고 탐색에서만 뺀다
-            if any(k in sectors[code] for k in KR_BIO):
+            if any(k in sectors[code] for k in KR_BIO) or any(k in name for k in KR_BIO_NAME):
                 continue
             uni.append({"ticker": code, "name": name, "market": market, "sector": sectors[code]})
     if len(uni) < 150:
@@ -460,6 +461,35 @@ def render(market, uni, df, sec, idx, now):
     return "\n".join(L) + "\n", status
 
 
+def write_index(market, out, now):
+    """지수 종가만 담은 작은 파일(index_<시장>.md). 브리핑이 읽는다. 실패해도 스윙 표에는 영향이 없다."""
+    names = ({"^KS11": "코스피", "^KQ11": "코스닥"} if market == "kr"
+             else {"^GSPC": "S&P 500", "^IXIC": "나스닥 종합", "^SOX": "필라델피아 반도체"})
+    rows, days = [], set()
+    try:
+        px = yahoo_prices(list(names))
+    except Exception as e:
+        px = {}
+        note(f"지수 파일 실패: {type(e).__name__}")
+    for t, nm in names.items():
+        d = px.get(t)
+        if d is None or len(d) < 6:
+            continue
+        c = d["close"]
+        last, prev = float(c.iloc[-1]), float(c.iloc[-2])
+        days.add(str(c.index[-1])[:10])
+        recent = " · ".join(f"{str(i)[5:10]} {float(v):,.2f}" for i, v in c.iloc[-5:].items())
+        rows.append(f"| {nm} | {last:,.2f} | {last - prev:+,.2f} | {(last / prev - 1) * 100:+.2f}% | {recent} |")
+    ok = len(rows) == len(names) and len(days) == 1
+    L = [f"작성 시각: {now:%Y-%m-%d %H:%M} KST",
+         f"기준 거래일: {max(days) if days else '없음'}",
+         f"상태: {'정상' if ok else ('축약' if rows else '실패')}", "",
+         f"# 지수 종가 ({'한국' if market == 'kr' else '미국'}) · 야후 일봉을 코드가 받은 값(원천 1곳) · 사실 자료",
+         "| 지수 | 종가 | 전일 대비 | 등락률 | 최근 5거래일 종가 |", "|---|---:|---:|---:|---|"] + rows
+    with open(os.path.join(out, f"index_{market}.md"), "w", encoding="utf-8") as f:
+        f.write("\n".join(L) + "\n")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--market", choices=("kr", "us"), required=True)
@@ -481,6 +511,7 @@ def main():
         df.round(4).to_csv(os.path.join(a.out, f"{a.market}_all.csv"), index=False)
     with open(os.path.join(a.out, f"probe_{a.market}.md"), "w", encoding="utf-8") as f:
         f.write(f"조달 진단 {now:%Y-%m-%d %H:%M} KST ({a.market}, 상태 {status})\n\n" + "\n".join(PROBE + [f"- 막힘: {p}" for p in PROBLEMS[:40]]) + "\n")
+    write_index(a.market, a.out, now)
     print(f"{a.market}: 상태 {status}, 계산 {len(df)}종목, 막힌 곳 {len(PROBLEMS)}건")
 
 
