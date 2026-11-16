@@ -3,8 +3,8 @@ name: swing-collect
 # 스윙 탐색용 시세 수집. 열쇠(API 키)·로그인 없음. 이 저장소의 swing/ 폴더에만 쓴다.
 on:
   schedule:
-    - cron: "30 9 * * 1-5"    # 18:30 KST 월~금: 한국장 마감 뒤
-    - cron: "0 22 * * 1-5"    # 07:00 KST 화~토: 미국장 마감 뒤
+    - cron: "40 7 * * 1-5"    # 16:40 KST 월~금: 한국장 마감 뒤(GitHub 지연 대비 앞당김)
+    - cron: "20 21 * * 1-5"   # 06:20 KST 화~토: 미국장 마감 뒤(GitHub 지연 대비 앞당김)
   workflow_dispatch:
     inputs:
       market:
@@ -43,7 +43,7 @@ jobs:
           CHOICE: ${{ inputs.market }}
         run: |
           if [ "$EVENT" = "workflow_dispatch" ]; then m="$CHOICE"
-          elif [ "$CRON" = "30 9 * * 1-5" ]; then m="kr"
+          elif [ "$CRON" = "40 7 * * 1-5" ]; then m="kr"
           else m="us"; fi
           case "$m" in kr|us) ;; *) echo "알 수 없는 시장: $m"; exit 1 ;; esac
           echo "market=$m" >> "$GITHUB_OUTPUT"
