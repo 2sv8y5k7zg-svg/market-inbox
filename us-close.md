@@ -1,63 +1,67 @@
-작성 시각: 2026-11-17 07:26 KST
-미국 거래일: 2026-11-16
+작성 시각: 2026-11-18 07:28 KST
+미국 거래일: 2026-11-17
 상태: 축약
 
 # 미국장 마감 사실 수집
 
-- 기준: 2026-11-16 미국 정규장 종료(16:00 EST = 2026-11-17 06:00 KST) 이후.
-- 확인 시각: 아래 자료는 2026-11-17 07:26~07:28 KST 웹 조회 결과를 기준으로 함. 개별 원문이 제공하지 않는 발표 시각은 추정하지 않음.
-- 수집 한계: 일부 지수의 정확한 전일 대비 등락률, VIX 확정 종가, 미국 국채 10년물의 동일 기준 종가, 장 마감 뒤 개별 발표 시각은 확인되지 않음. 출처 간 불일치가 있는 경우 추정치로 보정하지 않음.
+- 미국 정규장: 2026-11-17 화요일, 16:00 EST(2026-11-18 06:00 KST) 종료. 11월은 미국 동부 표준시(EST, UTC-5).
+- 웹 확인 시각: 2026-11-18 07:27~07:28 KST. 아래 수치는 이 조회 시각에 확인된 원문에 근거하며, 확정성에 이견이 있으면 명시한다.
+- 작성 기준: 공개 시장 사실만. 개인 투자정보, 보유 종목, 대화·메모리 정보 없음.
 
-## 1. 미국 주가지수 (현지 거래일 2026-11-16)
+## 1. 미국 주가지수 — 2026-11-17 정규장
 
-| 지수 | 확정 종가 | 전일 대비 등락률 | 자료 구분 | 출처·URL | 확인 시각(KST) |
-|---|---:|---:|---|---|---|
-| S&P 500 | 7,416.59 | -1.9% (보도상 반올림 수치) | 정규장 마감 보도 | AP https://apnews.com/article/35786b8f539ec95f16ae0500f71cfcc7 ; Reuters https://www.reuters.com/business/sp-500-nasdaq-futures-slide-nvidia-earnings-anthropic-debut-loom-2026-11-16/ (Reuters는 -1.89% 보도) | 2026-11-17 07:26 |
-| 나스닥 종합 | 24,509.76 | -2.5% (보도상 반올림 수치) | 정규장 마감 보도 | AP https://apnews.com/article/35786b8f539ec95f16ae0500f71cfcc7 ; Reuters https://www.reuters.com/business/sp-500-nasdaq-futures-slide-nvidia-earnings-anthropic-debut-loom-2026-11-16/ (Reuters는 -2.47% 보도) | 2026-11-17 07:26 |
-| 필라델피아 반도체지수(SOX) | 9,621.0 | -5.18% | 2026-11-16 일별 역사 데이터, 별도 원천 교차검증 미완료 | Investing.com https://ph.investing.com/indices/phlx-semiconductor-historical-data | 2026-11-17 07:27 |
+| 지표 | 종가 | 전일 대비 | 구분 | 원천 및 확인 시각 |
+|---|---:|---:|---|---|
+| S&P 500 | 7,340.53 | -1.03% | 정규장 종가 | Yahoo Finance 역사적 시세 및 AP 마감 보도, 11/18 07:27 KST |
+| 나스닥 종합 | 24,328.38 | -0.74% | AP 마감 보도 기준; 다른 시세 페이지와 수치 불일치 | AP, 11/18 07:27 KST |
+| 필라델피아 반도체지수(SOX) | 9,642.9 | +0.34% | Investing.com 역사적 시세 기준, 독립 교차 검증 미완료 | Investing.com, 11/18 07:27 KST |
 
-주의: S&P 500 및 나스닥 등락률은 보도 자료에 표시된 수치이며 임의로 역산하지 않음. SOX는 독립된 두 번째 원천의 확정 종가를 확인하지 못함.
+- S&P 500: Yahoo Finance https://finance.yahoo.com/quote/%5EGSPC/history/ ; AP https://apnews.com/article/ff6caef4d9289cf7f1e6ee48a706eddc
+- 나스닥 종합: AP https://apnews.com/article/ff6caef4d9289cf7f1e6ee48a706eddc ; 참고: Investing.com https://www.investing.com/indices/nasdaq-composite-historical-data 및 Yahoo Finance https://finance.yahoo.com/quote/%5EIXIC/history/ 에서 조회된 11/17 값이 AP와 불일치하므로 원천 간 검증 미완료. AP의 종가를 임의 조정하지 않음.
+- SOX: Investing.com https://www.investing.com/indices/phlx-semiconductor-historical-data
 
-## 2. 미국 10년물 국채금리 및 VIX
+## 2. 미국 10년물 국채금리와 VIX
 
-| 항목 | 2026-11-16 확정 종가 | 참고 관측치(종가 아님) | 출처·URL | 확인 시각(KST) |
-|---|---|---|---|---|
-| 미국 10년물 국채금리 | 미확인 | AP 마감 보도 중 5.13% 언급(정규장 확정 종가 여부 미확인) | AP https://apnews.com/article/35786b8f539ec95f16ae0500f71cfcc7 | 2026-11-17 07:26 |
-| VIX | 미확인 | 2026-11-16 장중 23.78 (15:26 EST, 종가 아님); 다른 장중 공급자도 변동 | YCharts https://ycharts.com/indices/%5EVIX/level ; Tallac https://www.tallacoptions.com/Indices/VIX | 2026-11-17 07:27 |
+| 지표 | 2026-11-17 | 관측 유형 | 출처 및 확인 시각 |
+|---|---|---|---|
+| 미국 10년물 국채금리 | 5.100% | Investing.com 일별 시세표의 종가. 미 재무부 공식 일별 고시값과의 동일성 미확인 | Investing.com, 11/18 07:27 KST |
+| VIX | 미확인 | 여러 시세 서비스의 11/17 값이 상충하고 공식 종가를 교차 검증하지 못함 | 아래 출처, 11/18 07:27 KST |
 
-## 3. ICE BofA US High Yield OAS
+- 미 10년물: https://www.investing.com/rates-bonds/u.s.-10-year-bond-yield-historical-data ; 미국 재무부 공식 수익률 자료 https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/textview?type=daily_treasury_yield_curve&field_tdr_date_value=2026
+- VIX 참고: https://finance.yahoo.com/quote/%5EVIX/history/ 및 https://www.tallacoptions.com/Indices/VIX . 두 원천의 당일 값이 일치하지 않아 수치를 채택하지 않음.
 
-- 시리즈: `BAMLH0A0HYM2`
-- 최신 공개 관측일: **2026-11-13** (2026-11-16 미국 거래일 수치가 아님)
-- 최신 관측값: **공개 저장소 재게시 제외**. 원문 페이지의 ICE Data Indices 라이선스 문구가 지수 데이터의 제3자 공개 배포에 사전 서면 승인이 필요하다고 명시함. 원문에서 직접 확인할 것.
-- 출처: FRED(ICE Data Indices, LLC) https://fred.stlouisfed.org/series/BAMLH0A0HYM2
-- FRED 표시 갱신 시각: 2026-11-16 09:41 CST
-- 확인 시각: 2026-11-17 07:27 KST
-- 데이터 구분: 최신 공개 관측치이며 2026-11-16의 장중값 또는 당일 종가로 대체하지 않음.
+## 3. 하이일드 가산금리 — ICE BofA US High Yield OAS
+
+- 시리즈: BAMLH0A0HYM2
+- 최신 확인 공개값: **3.34%** (단위: 퍼센트포인트로 표시되는 OAS 시리즈의 퍼센트 값)
+- **관측일: 2026-11-16** (11/17 당일 관측치가 아님)
+- FRED 페이지의 최종 갱신 표기: 2026-11-17 09:44 CST
+- 출처: FRED / ICE Data Indices https://fred.stlouisfed.org/series/BAMLH0A0HYM2 (확인: 2026-11-18 07:27 KST)
+- 저작권·재배포 조건: FRED 페이지가 ICE 저작권을 고지하므로 원문 시리즈 링크와 출처를 함께 기재. 별도 장기 시계열을 재배포하지 않음.
 
 ## 4. 미국 정규장 마감 이후 주요 소식
 
-정규장 마감(2026-11-16 16:00 EST) **이후 발표된 것임을 실제 발표 시각으로 검증한 주요 소식은 미확인**. 발표 시각이 없는 당일 마감 기사나 장중 사건을 마감 후 신규 발표로 분류하지 않음.
+1. **NVIDIA 분기 실적 발표** — NVIDIA는 회계연도 2027년 3분기 매출 1,158억 달러, 데이터센터 매출 1,076억 달러를 발표함. 발표일: 미국 현지 2026-11-17, **정확한 발표 시각 미확인**. 출처: NVIDIA IR https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Third-Quarter-Fiscal-2027/default.aspx (확인 11/18 07:27 KST).
+- 기타 마감 후 발표는 발표 시각과 16:00 EST 이후 여부를 직접 확인하지 못해 미수록. 확인되지 않은 3~5건을 임의로 채우지 않음.
 
-참고로 당일 마감 결과에 관한 보도(발표 시각 미확인, 마감 후 신규 발표 목록에 산입하지 않음):
-- AP: S&P 500과 나스닥 종합의 2026-11-16 하락 마감 보도. https://apnews.com/article/2e6a9c41b6336e9240c1b01585d20cd4 (확인 2026-11-17 07:26 KST)
-- Reuters: 2026-11-16 미국 주식시장 마감 보도. https://www.reuters.com/business/sp-500-nasdaq-futures-slide-nvidia-earnings-anthropic-debut-loom-2026-11-16/ (확인 2026-11-17 07:27 KST)
+## 5. 작성 시각 이후 24시간의 공식 미국 일정
 
-## 5. 작성 시각부터 24시간 내 미국 공식 일정
+조회 범위: 2026-11-18 07:28 KST ~ 2026-11-19 07:28 KST (미 동부 11/17 17:28 EST ~ 11/18 17:28 EST).
 
-대상 기간: 2026-11-17 07:26 KST ~ 2026-11-18 07:26 KST (2026-11-16 17:26 EST ~ 2026-11-17 17:26 EST).
+| 미국 현지 일정(EST) | 한국 시각(KST) | 공식 발표처 |
+|---|---|---|
+| 11/18 08:30 — 10월 신규주택 착공·건축허가 등 | 11/18 22:30 | 미 Census Bureau |
+| 11/18 09:10 — 연준 Christopher J. Waller 이사, Payments 주제 연설 | 11/18 23:10 | 연방준비제도 |
+| 11/18 10:00 — 2025년 직장 상해·질병 연례 통계 | 11/19 00:00 | 미 노동통계국(BLS) |
+| 11/18 10:00 — 2025년 야외 레크리에이션 경제 통계 | 11/19 00:00 | 미 경제분석국(BEA) |
 
-| 일정 | 미국 현지 시각 | 한국 시각(KST) | 공식 출처 | 확인 시각(KST) |
-|---|---|---|---|---|
-| 미 노동통계국 10월 수출입물가지수 발표 | 2026-11-17 08:30 EST | 2026-11-17 22:30 | BLS https://www.bls.gov/schedule/2026/ | 2026-11-17 07:27 |
-| 연방준비제도 G.17 산업생산 및 설비가동률 발표 | 2026-11-17 09:15 EST | 2026-11-17 23:15 | Fed https://www.federalreserve.gov/newsevents/2026-November.htm | 2026-11-17 07:27 |
-| 연준 Christopher J. Waller 이사 연설(Payments) | 2026-11-17 09:10 EST | 2026-11-17 23:10 | Fed https://www.federalreserve.gov/newsevents/2026-November.htm | 2026-11-17 07:27 |
-| NVIDIA 2027회계연도 3분기 실적 발표 예정 | 2026-11-17 약 16:20 EST | 2026-11-18 약 06:20 | NVIDIA IR https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Sets-Conference-Call-for-Third-Quarter-Financial-Results/ | 2026-11-17 07:27 |
-| NVIDIA 실적 발표 콘퍼런스콜 | 2026-11-17 17:00 EST | 2026-11-18 07:00 | NVIDIA IR https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Sets-Conference-Call-for-Third-Quarter-Financial-Results/ | 2026-11-17 07:27 |
+- Census 공식 일정: https://www.census.gov/about/event-calendar.html (확인 11/18 07:28 KST)
+- 연준 공식 일정: https://www.federalreserve.gov/newsevents/2026-November.htm (확인 11/18 07:28 KST)
+- BLS 공식 일정: https://www.bls.gov/schedule/2026/ (확인 11/18 07:28 KST)
+- BEA 공식 일정: https://www.bea.gov/news/schedule (확인 11/18 07:28 KST)
+- 이 범위에 속하는 기업 실적 발표 중 정확한 예정 시각을 공식 기업 IR로 검증한 건은 **미확인**.
 
-- 시각 환산 기준: 미국 동부 EST=UTC-5, 태평양 PST=UTC-8, 한국 KST=UTC+9. 미국은 2026-11-17에 표준시 적용.
-- 공식 일정에 없거나 확인할 수 없는 추가 실적·연설은 포함하지 않음.
+## 수집 상태 및 미확인
 
-## 수집 상태 판정
-
-**축약**: 일부 확정 종가 및 장 마감 이후의 개별 발표 시각을 검증하지 못했고, FRED/ICE 자료는 원문에 명시된 공개 재배포 제한 때문에 공개 GitHub에 수치를 싣지 않음. 확인되지 않은 항목은 미확인으로 처리함.
+- 상태 '축약': 나스닥 원천별 수치 불일치, VIX 확정 종가 불일치, SOX 단일 출처, 마감 후 발표 3~5건 미확보, 공식 기업 실적 일정 일부 미확인.
+- 숫자는 추정하거나 역산하지 않았으며, 종가와 최신 관측값을 구분함.
