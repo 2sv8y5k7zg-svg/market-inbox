@@ -1,82 +1,86 @@
-작성 시각: 2026-11-24 07:13 KST
-기준 거래일: 2026-11-23
+작성 시각: 2026-11-25 07:19 KST
+기준 거래일: 2026-11-24
 상태: 정상
 
 # 스윙 탐색용 시세 요약 (미국)
 - 범위: 미국: S&P 500 + 나스닥 100 (바이오·제약 제외), 지수는 SPY·QQQ로 대신함
-- 수집: 478종목 계산 / 대상 479종목
+- 수집: 477종목 계산 / 대상 479종목
 - 값은 계산 결과이며 사실 자료다. 매수·매도 의견이 아니다.
-- SPY: 722.29 · 1일 +4.7% · 5일 -2.4% · 20일 -5.6% · 60일 -5.9%
-- QQQ: 651.03 · 1일 +7.0% · 5일 -1.6% · 20일 -8.6% · 60일 -9.0%
+- SPY: 718.78 · 1일 -0.5% · 5일 -1.9% · 20일 -6.6% · 60일 -6.1%
+- QQQ: 638.10 · 1일 -2.0% · 5일 -2.9% · 20일 -11.5% · 60일 -10.9%
 
 ## 강해지는 업종 (5거래일 사이 지수 대비 강도가 가장 많이 오른 순 · 반등 포함, 성격 열로 구분)
 | 업종 | 성격 | 종목수 | 지수대비20일 | 5일전보다 | 5일 | 20일선 위 비율 |
 |---|---|---|---|---|---|---|
-| Construction & Engineering | 강세 강화 | 4 | +7.9% | +12.5%p | +2.8% | 75% |
-| Electronic Components | 전환 중 | 3 | +3.1% | +11.9%p | +2.6% | 33% |
-| Electronic Manufacturing Services | 전환 중 | 3 | +1.7% | +10.7%p | -1.1% | 0% |
-| Interactive Media & Services | 반등 | 4 | -5.4% | +8.6%p | -2.5% | 0% |
-| Semiconductor Materials & Equipment | 반등 | 5 | -4.7% | +7.0%p | -0.2% | 0% |
-| Casinos & Gaming | 강세 강화 | 3 | +18.3% | +6.3%p | +1.4% | 100% |
-| Communications Equipment | 반등 | 6 | -11.1% | +3.7%p | +1.1% | 17% |
-| Construction Machinery & Heavy Transportation Equipment | 반등 | 4 | -2.7% | +3.6%p | -1.8% | 25% |
-| Health Care Equipment | 강세 강화 | 16 | +10.6% | +3.4%p | -1.8% | 69% |
-| Consumer Staples Merchandise Retail | 강세 강화 | 5 | +15.0% | +3.4%p | +0.3% | 100% |
+| Casinos & Gaming | 강세 강화 | 3 | +23.1% | +12.6%p | +2.9% | 100% |
+| Movies & Entertainment | 강세 강화 | 5 | +13.4% | +7.8%p | +0.8% | 60% |
+| Health Care Distributors | 강세 강화 | 4 | +16.2% | +7.3%p | -0.1% | 100% |
+| Interactive Media & Services | 반등 | 4 | -6.2% | +6.6%p | -2.4% | 0% |
+| Health Care REITs | 강세 강화 | 3 | +14.3% | +5.9%p | -0.3% | 67% |
+| Industrial Conglomerates | 강세 강화 | 3 | +16.1% | +5.3%p | +2.7% | 100% |
+| Transaction & Payment Processing Services | 전환 중 | 9 | +12.8% | +5.3%p | -1.0% | 44% |
+| Construction Materials | 강세 강화 | 3 | +15.2% | +5.2%p | +3.5% | 100% |
+| Insurance Brokers | 강세 강화 | 6 | +18.4% | +5.2%p | +2.9% | 100% |
+| Automotive Retail | 강세 강화 | 3 | +13.4% | +4.8%p | +2.3% | 67% |
 
 ## 이미 강한 업종 (지수 대비 20일 강도 상위 5)
 | 업종 | 성격 | 종목수 | 지수대비20일 | 5일전보다 | 5일 | 20일선 위 비율 |
 |---|---|---|---|---|---|---|
-| Casinos & Gaming | 강세 강화 | 3 | +18.3% | +6.3%p | +1.4% | 100% |
-| Restaurants | 강세 강화 | 6 | +15.7% | -0.2%p | +0.7% | 100% |
-| Consumer Staples Merchandise Retail | 강세 강화 | 5 | +15.0% | +3.4%p | +0.3% | 100% |
-| Construction Materials | 전환 중 | 3 | +13.7% | +2.3%p | +1.7% | 33% |
-| Industrial Conglomerates | 강세 강화 | 3 | +12.8% | -3.3%p | +1.5% | 100% |
+| Casinos & Gaming | 강세 강화 | 3 | +23.1% | +12.6%p | +2.9% | 100% |
+| Restaurants | 강세 강화 | 6 | +19.0% | +4.5%p | +2.5% | 100% |
+| Insurance Brokers | 강세 강화 | 6 | +18.4% | +5.2%p | +2.9% | 100% |
+| Consumer Staples Merchandise Retail | 강세 강화 | 5 | +17.5% | +4.5%p | +3.8% | 100% |
+| Environmental & Facilities Services | 강세 강화 | 4 | +16.4% | -0.1%p | +0.2% | 100% |
 
 ## 약한 업종 (지수 대비 20일 강도 하위 5)
 | 업종 | 성격 | 종목수 | 지수대비20일 | 5일전보다 | 5일 | 20일선 위 비율 |
 |---|---|---|---|---|---|---|
-| Oil & Gas Refining & Marketing | 반등 | 3 | -17.2% | -6.0%p | -10.8% | 0% |
-| Technology Hardware, Storage & Peripherals | 반등 | 10 | -15.4% | +0.5%p | +0.1% | 10% |
-| Systems Software | 반등 | 7 | -14.6% | -9.1%p | -4.7% | 29% |
-| Communications Equipment | 반등 | 6 | -11.1% | +3.7%p | +1.1% | 17% |
-| Oil & Gas Exploration & Production | 반등 | 9 | -9.1% | -6.1%p | -6.5% | 0% |
+| Technology Hardware, Storage & Peripherals | 반등 | 10 | -24.3% | -8.2%p | -6.0% | 10% |
+| Communications Equipment | 반등 | 6 | -16.7% | -4.8%p | -5.4% | 17% |
+| Semiconductors | 반등 | 15 | -15.2% | -14.1%p | -9.5% | 0% |
+| Systems Software | 반등 | 7 | -14.7% | -10.4%p | -1.2% | 43% |
+| Electronic Manufacturing Services | 반등 | 3 | -13.3% | -6.0%p | -6.9% | 0% |
 
 ## 강해지는 업종 상위 6개의 종목 (업종마다 지수 대비 강도 상위 3)
 | 종목 | 업종 | 종가 | 1일 | 5일 | 20일 | 지수대비20일 | 거래량배수 | 고점대비 | 하루변동폭 |
 |---|---|---|---|---|---|---|---|---|---|
-| Quanta Services(PWR) | Construction & Engineering [강세 강화] | 609.00 | +8.9% | +3.9% | +8.0% | +13.6% | 1.2배 | -22.8% | 6.8% |
-| Jacobs Solutions(J) | Construction & Engineering [강세 강화] | 157.53 | +4.6% | -1.4% | +7.1% | +12.7% | 1.5배 | -2.8% | 3.4% |
-| Emcor(EME) | Construction & Engineering [강세 강화] | 649.49 | +7.7% | +1.7% | -2.5% | +3.2% | 0.7배 | -31.7% | 5.5% |
-| Amphenol(APH) | Electronic Components [전환 중] | 77.41 | +11.0% | +2.6% | +2.8% | +8.5% | 1.5배 | -13.9% | 6.3% |
-| Coherent Corp.(COHR) | Electronic Components [전환 중] | 215.81 | +15.3% | +6.1% | -2.6% | +3.1% | 1.1배 | -51.0% | 12.9% |
-| Corning Inc.(GLW) | Electronic Components [전환 중] | 108.31 | +14.8% | +2.0% | -15.0% | -9.4% | 1.2배 | -60.0% | 9.0% |
-| TE Connectivity(TEL) | Electronic Manufacturing Services [전환 중] | 212.97 | +6.5% | +0.1% | -0.0% | +5.6% | 1.1배 | -14.7% | 4.0% |
-| Flex Ltd.(FLEX) | Electronic Manufacturing Services [전환 중] | 73.94 | +11.6% | -1.1% | -4.0% | +1.7% | 1.0배 | -55.7% | 10.4% |
-| Jabil(JBL) | Electronic Manufacturing Services [전환 중] | 242.24 | +7.3% | -1.8% | -12.1% | -6.5% | 1.1배 | -43.5% | 6.5% |
-| Meta Platforms(META) | Interactive Media & Services [반등] | 597.60 | +6.6% | -4.6% | -5.2% | +0.4% | 0.9배 | -23.4% | 4.2% |
-| Alphabet Inc. (Class A)(GOOGL) | Interactive Media & Services [반등] | 282.10 | +6.3% | -0.6% | -11.0% | -5.3% | 1.0배 | -30.9% | 4.4% |
-| Alphabet Inc. (Class C)(GOOG) | Interactive Media & Services [반등] | 279.53 | +5.9% | -0.6% | -11.0% | -5.4% | 1.1배 | -30.8% | 4.3% |
-| Qnity Electronics(Q) | Semiconductor Materials & Equipment [반등] | 114.68 | +10.8% | -0.2% | +0.5% | +6.2% | 1.1배 | -35.3% | 6.7% |
-| KLA Corporation(KLAC) | Semiconductor Materials & Equipment [반등] | 145.85 | +15.0% | +1.3% | -2.1% | +3.5% | 1.1배 | -52.4% | 8.2% |
-| Applied Materials(AMAT) | Semiconductor Materials & Equipment [반등] | 346.87 | +14.6% | -0.8% | -10.4% | -4.7% | 1.5배 | -53.0% | 8.6% |
-| MGM Resorts(MGM) | Casinos & Gaming [강세 강화] | 33.69 | +4.1% | +1.4% | +18.0% | +23.7% | 0.8배 | -34.7% | 3.2% |
-| Wynn Resorts(WYNN) | Casinos & Gaming [강세 강화] | 83.34 | +3.7% | +1.4% | +12.6% | +18.3% | 0.7배 | -37.5% | 4.3% |
-| Las Vegas Sands(LVS) | Casinos & Gaming [강세 강화] | 39.14 | +0.7% | -1.7% | +7.9% | +13.5% | 0.8배 | -43.0% | 3.0% |
+| MGM Resorts(MGM) | Casinos & Gaming [강세 강화] | 34.32 | +1.9% | +2.9% | +22.6% | +29.2% | 0.6배 | -33.5% | 3.0% |
+| Wynn Resorts(WYNN) | Casinos & Gaming [강세 강화] | 84.11 | +0.9% | +3.0% | +16.5% | +23.1% | 0.8배 | -36.9% | 4.0% |
+| Las Vegas Sands(LVS) | Casinos & Gaming [강세 강화] | 39.61 | +1.2% | +0.7% | +10.6% | +17.2% | 0.5배 | -42.3% | 2.6% |
+| Walt Disney Company (The)(DIS) | Movies & Entertainment [강세 강화] | 122.51 | +1.9% | +4.8% | +11.1% | +17.8% | 1.2배 | -0.7% | 2.7% |
+| TKO Group Holdings(TKO) | Movies & Entertainment [강세 강화] | 189.45 | +2.3% | +0.8% | +10.0% | +16.6% | 0.8배 | -15.5% | 4.0% |
+| Live Nation Entertainment(LYV) | Movies & Entertainment [강세 강화] | 183.63 | +1.5% | +4.2% | +6.8% | +13.4% | 0.8배 | -3.0% | 3.1% |
+| Cardinal Health(CAH) | Health Care Distributors [강세 강화] | 279.65 | +2.8% | +0.1% | +13.5% | +20.1% | 1.2배 | -2.3% | 2.5% |
+| McKesson(MCK) | Health Care Distributors [강세 강화] | 1,078.09 | +2.8% | -1.2% | +11.5% | +18.1% | 0.8배 | -3.9% | 2.4% |
+| Cencora(COR) | Health Care Distributors [강세 강화] | 349.68 | +3.4% | -0.3% | +7.7% | +14.3% | 1.1배 | -6.7% | 2.9% |
+| Meta Platforms(META) | Interactive Media & Services [반등] | 589.82 | -1.3% | -4.7% | -4.9% | +1.7% | 0.6배 | -24.4% | 4.2% |
+| Alphabet Inc. (Class C)(GOOG) | Interactive Media & Services [반등] | 276.58 | -1.1% | -0.4% | -12.7% | -6.1% | 0.8배 | -31.5% | 4.1% |
+| Alphabet Inc. (Class A)(GOOGL) | Interactive Media & Services [반등] | 279.05 | -1.1% | -0.4% | -13.0% | -6.3% | 0.7배 | -31.6% | 4.2% |
+| Welltower(WELL) | Health Care REITs [강세 강화] | 245.14 | +1.7% | -0.3% | +8.5% | +15.1% | 0.7배 | -3.2% | 2.0% |
+| Healthpeak Properties(DOC) | Health Care REITs [강세 강화] | 20.37 | +1.8% | +4.7% | +7.6% | +14.3% | 1.0배 | -9.4% | 2.4% |
+| Ventas(VTR) | Health Care REITs [강세 강화] | 87.17 | +0.2% | -1.0% | +4.6% | +11.2% | 1.5배 | -13.7% | 2.1% |
+| 3M(MMM) | Industrial Conglomerates [강세 강화] | 187.14 | +1.5% | +3.5% | +9.5% | +16.1% | 1.0배 | -4.6% | 2.3% |
+| DuPont(DD) | Industrial Conglomerates [강세 강화] | 150.71 | -0.4% | +0.4% | +9.5% | +16.1% | 0.9배 | -5.5% | 3.1% |
+| Honeywell Technologies(HON) | Industrial Conglomerates [강세 강화] | 224.82 | +1.3% | +2.7% | +3.1% | +9.7% | 1.1배 | -12.6% | 3.2% |
 
 ## 거래량 급증 (직전 20일 평균의 2배 이상이면서 상승 마감, 상위 10)
 | 종목 | 업종 | 종가 | 1일 | 5일 | 20일 | 지수대비20일 | 거래량배수 | 고점대비 | 하루변동폭 |
 |---|---|---|---|---|---|---|---|---|---|
-| Hewlett Packard Enterprise(HPE) | Technology Hardware, Storage & Peripherals [반등] | 48.02 | +17.4% | +3.1% | -18.2% | -12.6% | 3.0배 | -34.7% | 8.4% |
-| Nvidia(NVDA) | Semiconductors [반등] | 165.05 | +31.5% | +5.7% | -23.6% | -18.0% | 2.7배 | -32.2% | 9.5% |
-| Dell Technologies(DELL) | Technology Hardware, Storage & Peripherals [반등] | 334.91 | +20.5% | +4.5% | -28.3% | -22.7% | 2.0배 | -43.7% | 12.0% |
+| Dollar Tree(DLTR) | Consumer Staples Merchandise Retail [강세 강화] | 154.65 | +11.2% | +10.7% | +25.1% | +31.7% | 2.8배 | -1.4% | 4.1% |
+| Best Buy(BBY) | Computer & Electronics Retail | 99.62 | +2.7% | +1.2% | +1.1% | +7.7% | 2.3배 | -6.7% | 4.1% |
+| International Paper(IP) | Paper & Plastic Packaging Products & Materials [전환 중] | 30.62 | +5.7% | -4.8% | -7.0% | -0.4% | 2.0배 | -36.0% | 4.8% |
 
 ## 20일 신고가이면서 52주 고점 5% 이내 (지수 대비 강도 상위 8)
 | 종목 | 업종 | 종가 | 1일 | 5일 | 20일 | 지수대비20일 | 거래량배수 | 고점대비 | 하루변동폭 |
 |---|---|---|---|---|---|---|---|---|---|
-| Target Corporation(TGT) | Consumer Staples Merchandise Retail [강세 강화] | 168.19 | +1.4% | +4.9% | +14.0% | +19.7% | 0.9배 | -2.2% | 3.7% |
-| Labcorp(LH) | Health Care Services [반등] | 372.56 | +1.5% | +0.0% | +12.9% | +18.6% | 0.7배 | -0.7% | 2.2% |
-| Quest Diagnostics(DGX) | Health Care Services [반등] | 263.12 | +1.9% | +0.3% | +8.3% | +13.9% | 1.0배 | -0.5% | 2.1% |
-| Walmart(WMT) | Consumer Staples Merchandise Retail [강세 강화] | 129.58 | +1.3% | +0.9% | +7.7% | +13.4% | 1.0배 | -3.9% | 2.5% |
+| Dollar Tree(DLTR) | Consumer Staples Merchandise Retail [강세 강화] | 154.65 | +11.2% | +10.7% | +25.1% | +31.7% | 2.8배 | -1.4% | 4.1% |
+| Target Corporation(TGT) | Consumer Staples Merchandise Retail [강세 강화] | 176.06 | +4.7% | +10.4% | +19.8% | +26.4% | 1.1배 | -0.4% | 3.5% |
+| Labcorp(LH) | Health Care Services [반등] | 376.11 | +1.0% | +2.1% | +13.6% | +20.2% | 0.7배 | -0.7% | 2.0% |
+| Omnicom Group(OMC) | Advertising | 89.23 | +2.2% | +1.9% | +13.3% | +19.9% | 0.8배 | -0.3% | 2.7% |
+| Becton Dickinson(BDX) | Health Care Equipment [강세 강화] | 220.00 | +2.1% | +2.1% | +12.8% | +19.4% | 1.0배 | -0.8% | 2.3% |
+| Darden Restaurants(DRI) | Restaurants [강세 강화] | 240.20 | +3.4% | +3.6% | +12.3% | +18.9% | 0.9배 | -0.2% | 2.9% |
+| Marsh McLennan(MRSH) | Insurance Brokers [강세 강화] | 213.16 | +2.9% | +3.4% | +11.8% | +18.4% | 1.0배 | -0.4% | 2.2% |
+| Yum! Brands(YUM) | Restaurants [강세 강화] | 166.33 | +1.1% | +3.1% | +11.2% | +17.8% | 0.7배 | -1.7% | 2.2% |
 
 ## 열 설명
 - 성격: 강세 강화 = 지수대비20일 0 이상이고 20일선 위 비율 50% 이상 / 반등 = 둘 다 미달(약했던 업종의 되돌림) / 전환 중 = 하나만 충족.
@@ -87,3 +91,4 @@
 
 ## 막힌 곳
 - 나스닥 100 목록 실패(표를 찾지 못함. 본 표의 열: [['0', '1'], ['Category', 'All-Time Highs[13]', 'All-Time Highs[13].1'], ['Year', 'Closing level', 'Change in Index in Points', 'Change in Index in\xa0%'], ['Milestone (closing)[13]', 'Date of Record (closing)[13]', 'Trading Days[13]'], ['Milestone (closing)[13]', 'Date of Record (closing)[13]', 'Trading Days[13]'], ['vteList of NASDAQ-100 companies', 'vteList of NASDAQ-100 companies.1']]) → S&P 500만 사용
+- 종목 시세 실패: CHRW
