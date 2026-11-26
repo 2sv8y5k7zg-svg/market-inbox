@@ -1,4 +1,4 @@
-작성 시각: 2026-11-26 07:18 KST
+작성 시각: 2026-11-27 07:19 KST
 기준 거래일: 2026-11-25
 상태: 정상
 
@@ -35,7 +35,7 @@
 ## 약한 업종 (지수 대비 20일 강도 하위 5)
 | 업종 | 성격 | 종목수 | 지수대비20일 | 5일전보다 | 5일 | 20일선 위 비율 |
 |---|---|---|---|---|---|---|
-| Technology Hardware, Storage & Peripherals | 반등 | 10 | -24.8% | -6.9%p | -5.3% | 20% |
+| Technology Hardware, Storage & Peripherals | 반등 | 9 | -24.5% | -7.0%p | -5.1% | 22% |
 | Semiconductor Materials & Equipment | 반등 | 5 | -17.9% | -9.6%p | -9.7% | 0% |
 | Electronic Manufacturing Services | 반등 | 3 | -14.4% | -8.0%p | -7.8% | 0% |
 | Systems Software | 반등 | 7 | -14.3% | -15.2%p | -1.0% | 43% |
@@ -58,10 +58,10 @@
 | Honeywell Technologies(HON) | Industrial Conglomerates [강세 강화] | 225.10 | +0.1% | +1.1% | +3.0% | +10.2% | 0.9배 | -12.5% | 3.1% |
 | Vivmark Residential(VMRK) | Multi-Family Residential REITs [강세 강화] | 65.33 | +1.1% | +2.8% | +7.3% | +14.5% | 0.8배 | -7.5% | 2.0% |
 | Essex Property Trust(ESS) | Multi-Family Residential REITs [강세 강화] | 279.21 | +1.3% | +2.0% | +6.8% | +14.0% | 0.6배 | -7.1% | 1.9% |
-| UDR, Inc.(UDR) | Multi-Family Residential REITs [강세 강화] | 36.67 | +1.4% | +1.6% | +6.1% | +13.3% | 0.7배 | -10.9% | 1.8% |
+| UDR, Inc.(UDR) | Multi-Family Residential REITs [강세 강화] | 36.67 | +1.4% | +1.6% | +6.1% | +13.3% | 0.8배 | -10.9% | 1.8% |
 | Copart(CPRT) | Diversified Support Services [강세 강화] | 33.17 | +2.5% | +5.4% | +14.5% | +21.7% | 1.0배 | -20.6% | 2.9% |
 | Cintas(CTAS) | Diversified Support Services [강세 강화] | 227.65 | +0.8% | +2.5% | +7.2% | +14.4% | 1.0배 | -2.3% | 2.1% |
-| Leidos(LDOS) | Diversified Support Services [강세 강화] | 130.62 | +1.8% | +3.9% | -6.4% | +0.8% | 0.5배 | -35.7% | 3.5% |
+| Leidos(LDOS) | Diversified Support Services [강세 강화] | 130.62 | +1.8% | +3.9% | -6.4% | +0.8% | 0.6배 | -35.7% | 3.5% |
 
 ## 거래량 급증 (직전 20일 평균의 2배 이상이면서 상승 마감, 상위 10)
 | 종목 | 업종 | 종가 | 1일 | 5일 | 20일 | 지수대비20일 | 거래량배수 | 고점대비 | 하루변동폭 |
@@ -76,7 +76,7 @@
 | Brown & Brown(BRO) | Insurance Brokers [강세 강화] | 78.43 | +3.2% | +7.6% | +19.4% | +26.6% | 1.4배 | -4.1% | 2.8% |
 | Omnicom Group(OMC) | Advertising | 90.70 | +1.6% | +2.9% | +16.6% | +23.8% | 0.7배 | -0.9% | 2.7% |
 | Walt Disney Company (The)(DIS) | Movies & Entertainment [강세 강화] | 125.60 | +2.5% | +2.6% | +15.2% | +22.4% | 1.6배 | -0.5% | 2.7% |
-| Jack Henry & Associates(JKHY) | Transaction & Payment Processing Services [강세 강화] | 182.08 | +2.7% | +4.3% | +15.2% | +22.4% | 0.8배 | -4.7% | 2.7% |
+| Jack Henry & Associates(JKHY) | Transaction & Payment Processing Services [강세 강화] | 182.08 | +2.7% | +4.3% | +15.2% | +22.4% | 0.9배 | -4.7% | 2.7% |
 | Masco(MAS) | Building Products [강세 강화] | 86.93 | +2.2% | +3.1% | +14.7% | +21.9% | 1.0배 | -0.7% | 2.8% |
 | Assurant(AIZ) | Multi-line Insurance [강세 강화] | 325.73 | +1.0% | +2.1% | +14.3% | +21.5% | 0.9배 | -0.6% | 1.8% |
 | Becton Dickinson(BDX) | Health Care Equipment [강세 강화] | 221.24 | +0.6% | +2.4% | +13.4% | +20.6% | 0.6배 | -0.7% | 2.2% |
@@ -91,4 +91,3 @@
 
 ## 막힌 곳
 - 나스닥 100 목록 실패(표를 찾지 못함. 본 표의 열: [['0', '1'], ['Category', 'All-Time Highs[13]', 'All-Time Highs[13].1'], ['Year', 'Closing level', 'Change in Index in Points', 'Change in Index in\xa0%'], ['Milestone (closing)[13]', 'Date of Record (closing)[13]', 'Trading Days[13]'], ['Milestone (closing)[13]', 'Date of Record (closing)[13]', 'Trading Days[13]'], ['vteList of NASDAQ-100 companies', 'vteList of NASDAQ-100 companies.1']]) → S&P 500만 사용
-- 종목 시세 실패: AZO
