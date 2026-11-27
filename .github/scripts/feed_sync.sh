@@ -24,8 +24,13 @@ TXT
 cd "$work"
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+git checkout -q -B main
 git add -A
 if git diff --cached --quiet; then echo "바뀐 것 없음"; exit 0; fi
 git commit -q -m "feed: $(date -u +%FT%H:%MZ)"
-for i in 1 2 3; do git pull -q --rebase && git push -q && exit 0; sleep 5; done
+for i in 1 2 3; do
+  if git ls-remote --exit-code --heads origin main >/dev/null 2>&1; then git pull -q --rebase origin main || true; fi
+  git push -q origin HEAD:main && exit 0
+  sleep 5
+done
 exit 1
