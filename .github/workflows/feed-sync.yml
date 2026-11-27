@@ -1,0 +1,26 @@
+name: feed-sync
+
+# 장 마감 정리(GPT가 올림)가 바뀌면 공개 저장소로 사실 자료만 복사한다.
+on:
+  push:
+    branches: [main]
+    paths: [kr-close.md, us-close.md, swing/index_kr.md, swing/index_us.md]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: feed-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: 공개 저장소로 복사
+        env:
+          FEED_TOKEN: ${{ secrets.FEED_TOKEN }}
+        run: bash .github/scripts/feed_sync.sh

@@ -67,3 +67,9 @@ jobs:
             sleep 5
           done
           exit 1
+
+      - name: 공개 저장소로 사실 자료 복사
+        if: always()
+        env:
+          FEED_TOKEN: ${{ secrets.FEED_TOKEN }}
+        run: bash .github/scripts/feed_sync.sh
